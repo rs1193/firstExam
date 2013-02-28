@@ -1,110 +1,66 @@
-//Singleton Pattern
-var NAMESPACE = function () {
-
-    var privateFunction1 = function () {
-        privateFunction2();
-    };
-
-    var privateFunction2 = function () {
-        alert('I\'m private!');
-    };
-
-    var Constructors = {};
-
-    Constructors.PlanetEarth = function () {
-        privateFunction1();
-        privateFunction2();
-    };
-
-    Constructors.PlanetEarth.prototype = {
-        someMethod: function () {
-            if (console && console.log) {
-                console.log('some method');             
-            }
-        }
-    };
-
-    Constructors.Person = function (name, address) {
-        this.name = name;
-        this.address = address;
-    };
-
-    Constructors.Person.prototype = {
-        walk: function () {
-            alert('STOMP!');
-        }
-    };
-
-    return {
-        Person: Constructors.Person, // there can be many
-        PlanetEarth: new Constructors.PlanetEarth() // there can only be one!
-    };
-
-}();
+//SINGLETON
+var mySingleton = (function (){
+  var instance;
+  function init(){
+  };
+  return {
+    getInstance: function () {
+      if ( !instance ) {
+        instance = init();
+      }
+      return instance;
+    }}();
+var singleA = mySingleton;
+var singleB = mySingleton;
+console.log( singleA === singleB );
 
 
-//The Factory Method
-function ObjectFactory() {}
-ObjectFactory.create = function (o) {
-    var args = [].slice.call(arguments, 1);
 
-    function F() {}
-    F.prototype = o.prototype;
-    var instance = new F();
-    o.apply(instance, args);
-    return instance;
+//FACTORY METHOD
+function Car( options ) {
+  this.state = options.state || "new";
+  this.color = options.color || "white";
+}
+function VehicleFactory() {}
+VehicleFactory.prototype.vehicleClass = Car;
+VehicleFactory.prototype.createVehicle = function ( options ) {
+  if( options.vehicleType === "car" ){
+    this.vehicleClass = Car;
+  }
+  return new this.vehicleClass( options );
 };
 
-//The Repository
-var Repository = {
-    'invitation': Invitation,
-    'message': Message
-};
 
-//Usage
-var inv = ObjectFactory.create(Repository["invitation"], "invitation", "invitation body", "Sender");
-var msg = ObjectFactory.create(Repository["message"], "message", "message body");
-var inv2 = ObjectFactory.create(Repository["invitation"], "invitation2", "invitation body2", "Sender");
-
-
-
-//Prototype
+//PROTOTYPE
 var Person = {  
     numFeet: 2,  
     numHeads: 1,  
     numHands:2  
 };  
-//Object.create takes its first argument and applies it to the prototype of your new object.  
-var tilo = Object.create(Person);  
-console.log(tilo.numHeads); //outputs 1  
-tilo.numHeads = 2;  
-console.log(tilo.numHeads) //outputs 2  
+var rom = Object.create(Person);  
+console.log(rom.numHeads); 
+rom.numHeads = 1;  
 
-//Constructor
-function Car( model, year, miles ) {
+
+
+//CONSTRUCTOR
+function vehicle( model, year, miles ) {
   this.model = model;
   this.year = year;
-  this.miles = miles;
-  this.toString = function () {
-    return this.model + " has done " + this.miles + " miles";
-  };
 }
-var civic = new Car( "Honda Civic", 2009, 20000 );
-var mondeo = new Car( "Ford Mondeo", 2010, 5000 );
+var accord = new vehicle( "Honda Accord", 2002 );
+var focus = new vehicle ( "Ford Focus", 2004 );
 
 
-//Decorator
-
+//DECORATOR
 function vehicle( vehicleType ){  
 }  
-var testInstance = new vehicle('truck');  
-console.log(testInstance);
 var truck = new vehicle('truck');   
-truck.setModel = function( modelName ){  
-    this.model = modelName;  
+truck.setModel = function( model ){  
+    this.model = model;  
 }  
-truck.setColor = function( color ){  
-    this.color = color;  
+truck.setYear = function( year ){  
+    this.year = year;  
 }  
 
 
