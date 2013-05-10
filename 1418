@@ -1,3 +1,4 @@
+
 //SINGLETON
 var mySingleton = (function (){
   var instance;
